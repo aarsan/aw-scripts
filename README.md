@@ -16,14 +16,37 @@ Create a `.env` file in the same directory as the deployment script with the fol
 
 ```
 # Environment variables for Azure deployment
+SUBSCRIPTION_ID=your-azure-subscription-id-here
 ADMIN_PASSWORD=YourSecurePasswordHere
+RESOURCE_GROUP=your-resource-group-name
+VNET_NAME=your-vnet-name
+SQL_VM_NAME=your-sql-vm-name
+APP_VM_NAME=your-app-vm-name
+SQL_VM_SKU=Standard_M176bds_4_v3
+APP_VM_SKU=Standard_M176bds_4_v3
+REGION=eastus2
+PPG_NAME=sql-app
+ZONE=2
 ```
 
+**Required Variables:**
+- `SUBSCRIPTION_ID`: Your Azure subscription ID (GUID format)
+- `ADMIN_PASSWORD`: Strong password for VM admin accounts
+- `RESOURCE_GROUP`: Name for the Azure resource group
+- `VNET_NAME`: Name for the virtual network
+- `SQL_VM_NAME`: Name for the SQL server VM
+- `APP_VM_NAME`: Name for the application server VM
+- `SQL_VM_SKU`: VM size for the SQL server (e.g., Standard_M176bds_4_v3)
+- `APP_VM_SKU`: VM size for the application server (e.g., Standard_M176bds_4_v3)
+- `REGION`: Azure region for deployment (e.g., eastus2, westus2)
+- `PPG_NAME`: Name for the proximity placement group
+- `ZONE`: Availability zone number (1, 2, or 3)
+
 **Important Security Notes:**
-- Replace `YourSecurePasswordHere` with a strong password that meets Azure's requirements
+- Replace all placeholder values with your actual configuration
 - The password must be 12-123 characters long and contain at least 3 of the following: lowercase, uppercase, numbers, special characters
 - **Never commit the `.env` file to version control**
-- Add `.env` to your `.gitignore` file
+- The `.env` file is already included in `.gitignore` for your protection
 
 ### 2. Password Requirements
 
@@ -39,15 +62,26 @@ Example of a strong password format: `MySecureP@ssw0rd2024!`
 
 ### 3. Configuration Variables
 
-Before running the script, review and modify these variables in `deploy.ps1` as needed:
+All configuration variables are now managed through the `.env` file:
 
-- `$subscriptionId`: Your Azure subscription ID
-- `$resource_group`: Name for the resource group
-- `$vnet`: Virtual network name
-- `$region`: Azure region (default: eastus2)
-- `$zone`: Availability zone (default: 2)
-- `$sql_vm_sku`: VM size for SQL server
-- `$app_vm_sku`: VM size for application server
+**Infrastructure Configuration:**
+- `SUBSCRIPTION_ID`: Your Azure subscription ID
+- `RESOURCE_GROUP`: Name for the resource group
+- `REGION`: Azure region for deployment
+- `ZONE`: Availability zone number
+
+**Network Configuration:**
+- `VNET_NAME`: Virtual network name
+- `PPG_NAME`: Proximity placement group name
+
+**Virtual Machine Configuration:**
+- `SQL_VM_NAME`: Name for the SQL server VM
+- `APP_VM_NAME`: Name for the application server VM
+- `SQL_VM_SKU`: VM size for SQL server
+- `APP_VM_SKU`: VM size for application server
+- `ADMIN_PASSWORD`: Admin password for both VMs
+
+**Note:** The script no longer contains any hard-coded configuration values. All customization is done through the `.env` file, making it easy to manage different environments and deployments.
 
 ## Usage
 

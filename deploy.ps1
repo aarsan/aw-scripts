@@ -23,35 +23,30 @@ Load-EnvFile
 # Set Azure subscription
 az account set --subscription $SUBSCRIPTION_ID
 
-$sql_vm_sku = "Standard_L8s_v3"
-$app_vm_sku = "Standard_L8s_v3"
-$region = "eastus2"
-$ppg_name = "sql-app"
-$zone = 2
-
 # Create Resource Group
 Write-Host "Creating Resource Group: $RESOURCE_GROUP"
 az group create `
     --name $RESOURCE_GROUP `
-    --location $region
+    --location $REGION
 
 # Create Virtual Network
 Write-Host "Creating Virtual Network: $VNET_NAME"
 az network vnet create `
     --resource-group $RESOURCE_GROUP `
     --name $VNET_NAME `
-    --location $region `
+    --location $REGION `
     --address-prefixes "10.0.0.0/16" `
     --subnet-name "default" `
     --subnet-prefixes "10.0.1.0/24"
 
 # Create Proximity Placement Group
-Write-Host "Creating Proximity Placement Group: $ppg_name"
+Write-Host "Creating Proximity Placement Group: $PPG_NAME"
 az ppg create `
     --resource-group $RESOURCE_GROUP `
-    --name $ppg_name `
-    --location $region `
-    --type Standard
+    --name $PPG_NAME `
+    --location $REGION `
+    --type Standard `
+    --intent-vm-sizes $SQL_VM_SKU $APP_VM_SKU
 
 # Create SQL VM in the PPG
 Write-Host "Creating SQL VM: $SQL_VM_NAME"
@@ -59,16 +54,17 @@ az vm create `
     --resource-group $RESOURCE_GROUP `
     --name $SQL_VM_NAME `
     --image "MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest" `
-    --size $sql_vm_sku `
-    --location $region `
-    --zone $zone `
-    --ppg $ppg_name `
+    --size $SQL_VM_SKU `
+    --location $REGION `
+    --zone $ZONE `
+    --ppg $PPG_NAME `
     --vnet-name $VNET_NAME `
     --subnet "default" `
     --admin-username "azureuser" `
     --admin-password $ADMIN_PASSWORD `
     --public-ip-sku Standard `
-    --accelerated-networking true
+    --accelerated-networking true `
+    --security-type Standard
 
 # Create App VM in the same PPG
 Write-Host "Creating App VM: $APP_VM_NAME"
@@ -76,14 +72,15 @@ az vm create `
     --resource-group $RESOURCE_GROUP `
     --name $APP_VM_NAME `
     --image "MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest" `
-    --size $app_vm_sku `
-    --location $region `
-    --zone $zone `
-    --ppg $ppg_name `
+    --size $APP_VM_SKU `
+    --location $REGION `
+    --zone $ZONE `
+    --ppg $PPG_NAME `
     --vnet-name $VNET_NAME `
     --subnet "default" `
     --admin-username "azureuser" `
     --admin-password $ADMIN_PASSWORD `
     --public-ip-sku Standard `
-    --accelerated-networking true
+    --accelerated-networking true `
+    --security-type Standard
 
