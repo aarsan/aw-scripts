@@ -80,8 +80,8 @@ for ($i = 1; $i -le 9; $i++) {
         --location $REGION `
         --zone $ZONE `
         --sku PremiumV2_LRS `
-        --disk-iops-read-write 3000 `
-        --disk-mbps-read-write 125
+        --disk-iops-read-write 80000 `
+        --disk-mbps-read-write 1200
     
     # Attach disk to VM
     az vm disk attach `
