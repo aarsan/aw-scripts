@@ -66,6 +66,30 @@ az vm create `
     --accelerated-networking true `
     --security-type Standard
 
+# Add 9 Premium SSD v2 disks to SQL VM
+Write-Host "Adding 9 Premium SSD v2 disks to SQL VM..."
+for ($i = 1; $i -le 9; $i++) {
+    $diskName = "$SQL_VM_NAME-data-disk-$i"
+    Write-Host "Creating disk $i of 9: $diskName"
+    
+    # Create Premium SSD v2 disk
+    az disk create `
+        --resource-group $RESOURCE_GROUP `
+        --name $diskName `
+        --size-gb 1024 `
+        --location $REGION `
+        --zone $ZONE `
+        --sku PremiumV2_LRS `
+        --disk-iops-read-write 3000 `
+        --disk-mbps-read-write 125
+    
+    # Attach disk to VM
+    az vm disk attach `
+        --resource-group $RESOURCE_GROUP `
+        --vm-name $SQL_VM_NAME `
+        --name $diskName
+}
+
 # Create App VM in the same PPG
 Write-Host "Creating App VM: $APP_VM_NAME"
 az vm create `
