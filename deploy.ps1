@@ -30,14 +30,14 @@ az group create `
     --location $REGION
 
 # Create Virtual Network
-Write-Host "Creating Virtual Network: $VNET_NAME"
-az network vnet create `
-    --resource-group $RESOURCE_GROUP `
-    --name $VNET_NAME `
-    --location $REGION `
-    --address-prefixes "10.0.0.0/16" `
-    --subnet-name "default" `
-    --subnet-prefixes "10.0.1.0/24"
+# Write-Host "Creating Virtual Network: $VNET_NAME"
+# az network vnet create `
+#     --resource-group $RESOURCE_GROUP `
+#     --name $VNET_NAME `
+#     --location $REGION `
+#     --address-prefixes "10.0.0.0/16" `
+#     --subnet-name "default" `
+#     --subnet-prefixes "10.0.1.0/24"
 
 # Create Proximity Placement Group
 Write-Host "Creating Proximity Placement Group: $PPG_NAME"
