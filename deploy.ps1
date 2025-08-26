@@ -30,14 +30,14 @@ az group create `
     --location $REGION
 
 # Create Virtual Network
-# Write-Host "Creating Virtual Network: $VNET_NAME"
-# az network vnet create `
-#     --resource-group $RESOURCE_GROUP `
-#     --name $VNET_NAME `
-#     --location $REGION `
-#     --address-prefixes "10.0.0.0/16" `
-#     --subnet-name "default" `
-#     --subnet-prefixes "10.0.1.0/24"
+Write-Host "Creating Virtual Network: $VNET_NAME"
+az network vnet create `
+    --resource-group $RESOURCE_GROUP `
+    --name $VNET_NAME `
+    --location $REGION `
+    --address-prefixes "10.0.0.0/16" `
+    --subnet-name "default" `
+    --subnet-prefixes "10.0.1.0/24"
 
 # Create Proximity Placement Group
 Write-Host "Creating Proximity Placement Group: $PPG_NAME"
@@ -53,7 +53,7 @@ Write-Host "Creating SQL VM: $SQL_VM_NAME"
 az vm create `
     --resource-group $RESOURCE_GROUP `
     --name $SQL_VM_NAME `
-    --image "MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest" `
+    --image $SQL_VM_IMAGE `
     --size $SQL_VM_SKU `
     --location $REGION `
     --zone $ZONE `
@@ -67,35 +67,35 @@ az vm create `
     --security-type Standard
 
 # Add 9 Premium SSD v2 disks to SQL VM
-Write-Host "Adding 9 Premium SSD v2 disks to SQL VM..."
-for ($i = 1; $i -le 9; $i++) {
-    $diskName = "$SQL_VM_NAME-data-disk-$i"
-    Write-Host "Creating disk $i of 9: $diskName"
+# Write-Host "Adding 9 Premium SSD v2 disks to SQL VM..."
+# for ($i = 1; $i -le 9; $i++) {
+#     $diskName = "$SQL_VM_NAME-data-disk-$i"
+#     Write-Host "Creating disk $i of 9: $diskName"
     
-    # Create Premium SSD v2 disk
-    az disk create `
-        --resource-group $RESOURCE_GROUP `
-        --name $diskName `
-        --size-gb 1024 `
-        --location $REGION `
-        --zone $ZONE `
-        --sku PremiumV2_LRS `
-        --disk-iops-read-write 80000 `
-        --disk-mbps-read-write 1200
+#     # Create Premium SSD v2 disk
+#     az disk create `
+#         --resource-group $RESOURCE_GROUP `
+#         --name $diskName `
+#         --size-gb 1024 `
+#         --location $REGION `
+#         --zone $ZONE `
+#         --sku PremiumV2_LRS `
+#         --disk-iops-read-write 80000 `
+#         --disk-mbps-read-write 1200
     
-    # Attach disk to VM
-    az vm disk attach `
-        --resource-group $RESOURCE_GROUP `
-        --vm-name $SQL_VM_NAME `
-        --name $diskName
-}
+#     # Attach disk to VM
+#     az vm disk attach `
+#         --resource-group $RESOURCE_GROUP `
+#         --vm-name $SQL_VM_NAME `
+#         --name $diskName
+# }
 
 # Create App VM in the same PPG
 Write-Host "Creating App VM: $APP_VM_NAME"
 az vm create `
     --resource-group $RESOURCE_GROUP `
     --name $APP_VM_NAME `
-    --image "MicrosoftWindowsServer:WindowsServer:2022-datacenter-azure-edition:latest" `
+    --image $APP_VM_IMAGE `
     --size $APP_VM_SKU `
     --location $REGION `
     --zone $ZONE `
@@ -105,6 +105,6 @@ az vm create `
     --admin-username "azureuser" `
     --admin-password $ADMIN_PASSWORD `
     --public-ip-sku Standard `
-    --accelerated-networking true `
-    --security-type Standard
+    # --accelerated-networking true ` 
+    # --security-type Standard
 
