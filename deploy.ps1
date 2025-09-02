@@ -101,19 +101,19 @@ for ($i = 1; $i -le 9; $i++) {
 
 # Create App VM in the same PPG
 Write-Host "Creating App VM: $APP_VM_NAME"
-az vm create `
-    --resource-group $RESOURCE_GROUP `
-    --name $APP_VM_NAME `
-    --image $APP_VM_IMAGE `
-    --size $APP_VM_SKU `
-    --location $REGION `
-    --zone $ZONE `
-    --ppg $PPG_NAME `
-    --vnet-name $VNET_NAME `
-    --subnet "default" `
-    --admin-username "azureuser" `
-    --admin-password $ADMIN_PASSWORD `
-    --public-ip-sku Standard `
-    --accelerated-networking true `
-    --security-type Standard
+# az vm create `
+#     --resource-group $RESOURCE_GROUP `
+#     --name $APP_VM_NAME `
+#     --image $APP_VM_IMAGE `
+#     --size $APP_VM_SKU `
+#     --location $REGION `
+#     --zone $ZONE `
+#     --ppg $PPG_NAME `
+#     --vnet-name $VNET_NAME `
+#     --subnet "default" `
+#     --admin-username "azureuser" `
+#     --admin-password $ADMIN_PASSWORD `
+#     --public-ip-sku Standard `
+#     --accelerated-networking true `
+#     --security-type Standard
 
